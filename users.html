@@ -8,21 +8,22 @@
 </head>
 <body>
     <div id="myapp">
-       <form action="" id="form">
-        <fieldset>
-            <legend>Login</legend>
-            <label for="">
-                Correo electronico:
-                <input type="text" v-model="email" required>
-            </label>
-            <label for="">
-                Contraseña:
-                <input type="password" v-model="password" required>
-            </label>
-
-            <button @click="login">Enter</button>
-        </fieldset>
-       </form>
+        <span>Bienbenido {{ name }}:</span>
+        
+            <tr>
+                <th>Name</th>
+                <th>UserName</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>WebSite</th>
+            </tr>
+            <!-- <tr v-for="u in users">
+                <th>{{ u.name }}</th>
+                <th>{{ u.userName }}</th>
+                <th>{{ u.email }}</th>
+                <th>{{ u.phone }}</th>
+                <th>{{ u.website }}</th>
+            </tr> -->
     </div>
     
 <script src="https://unpkg.com/vue@3"></script>
@@ -31,39 +32,15 @@
     createApp ({
         data() {
             return {
-                users:null,
-                email:'',
-                password:''
+                users:null
             }
         },methods: {
-            login(e){
-                
-                let tme=this.email
-                let tmp=this.password
-                let tmu=null 
-
-                var access=this.users.map(function(u){
-                    if(tme===u.email){
-                        if(tmp===u.password){
-
-                            alert('Acceso Correcto')
-
-                            var tmu = [{name:u.name,username:u.username,email:u.email}]
-                            
-                            localStorage.setItem('user',JSON.stringify(tmu))   
-                            
-                            location.href('localhost/vue/users.html')
-                            return true;
-                        }
-                    }
-                })
-                this.email=''
-                this.password=''
-
-                e.preventDefault()
-            }
         },mounted(){
-            fetch('users.json')
+            let u =localStorage.getItem('user')
+            let user=JSON.parse(u)
+
+            console.log(user.name)
+            fetch('users.json')         
             .then((res) => res.json())
             .then((json) => (this.users=json))
             .catch((err) => (alert('No se obtuvo respuesta')))
