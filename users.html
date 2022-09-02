@@ -31,7 +31,7 @@
                     <td>{{u.phone}}</td>
                     <td>{{u.website}}</td>
                     <td>
-                        <button>Modificar</button>
+                        <button @click='modificar'>Modificar</button>
                         <button>Eliminar</button>
                     </td>
                 </tr>
@@ -51,7 +51,33 @@
                     n: ''
                 }
             },
-            methods: {},
+            methods: {
+                modificar() {
+                    let tme = this.email
+                    let tmp = this.password
+                    let tmu = null
+
+                    var access = this.users.map(function(u) {
+                        if (tme === u.email) {
+                            if (tmp === u.password) {
+
+                                alert('Acceso Correcto')
+
+                                var tmu = {
+                                    name: u.name,
+                                    username: u.username,
+                                    email: u.email
+                                }
+
+                                localStorage.setItem('user', JSON.stringify(tmu))
+
+                                window.location.href = "users.html";
+                                return true;
+                            }
+                        }
+                    })
+                }
+            },
             mounted() {
                 let u = localStorage.getItem('user')
                 let user = JSON.parse(u)

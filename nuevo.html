@@ -5,24 +5,40 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="initial-scale=1.0">
-    <title>Ejemplo VUE</title>
+    <title>Nuevo</title>
 </head>
 
 <body>
     <div id="myapp">
         <form action="" id="form">
             <fieldset>
-                <legend>Login</legend>
+                <legend>Register</legend>
                 <label for="">
-                Correo electronico:
-                <input type="text" v-model="email" required>
-            </label>
+                    Nombre completo:
+                    <input type="text" v-model="name" required>
+                </label>
                 <label for="">
-                Contraseña:
-                <input type="password" v-model="password" required>
-            </label>
+                    Nombre de Usuario:
+                    <input type="text" v-model="username" required>
+                </label>
+                <label for="">
+                    Correo electronico:
+                    <input type="text" v-model="email" required>
+                </label>
+                <label for="">
+                    Contraseña:
+                    <input type="password" v-model="password" required>
+                </label>
+                <label for="">
+                    Numero Telefonico:
+                    <input type="text" v-model="phone" required>
+                </label>
+                <label for="">
+                    Pagina web:
+                    <input type="text" v-model="website" required>
+                </label>
 
-                <button @click="login">Enter</button>
+                <button @click="register">Enter</button>
             </fieldset>
         </form>
     </div>
@@ -36,12 +52,16 @@
             data() {
                 return {
                     users: null,
+                    name: '',
+                    username: '',
                     email: '',
-                    password: ''
+                    password: '',
+                    phone: '',
+                    website: ''
                 }
             },
             methods: {
-                login(e) {
+                register(e) {
 
                     let tme = this.email
                     let tmp = this.password
@@ -66,8 +86,6 @@
                             }
                         }
                     })
-                    this.email = ''
-                    this.password = ''
 
                     e.preventDefault()
                 }
