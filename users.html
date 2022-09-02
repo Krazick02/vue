@@ -1,51 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="initial-scale=1.0">
     <title>Ejemplo VUE</title>
 </head>
+
 <body>
     <div id="myapp">
-        <span>Bienbenido {{ name }}:</span>
-        
-            <tr>
-                <th>Name</th>
-                <th>UserName</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>WebSite</th>
-            </tr>
-            <!-- <tr v-for="u in users">
-                <th>{{ u.name }}</th>
-                <th>{{ u.userName }}</th>
-                <th>{{ u.email }}</th>
-                <th>{{ u.phone }}</th>
-                <th>{{ u.website }}</th>
-            </tr> -->
-    </div>
-    
-<script src="https://unpkg.com/vue@3"></script>
-<script type="text/javascript">
-    const {createApp} =Vue
-    createApp ({
-        data() {
-            return {
-                users:null
-            }
-        },methods: {
-        },mounted(){
-            let u =localStorage.getItem('user')
-            let user=JSON.parse(u)
+        <span>Bienbenido : {{ n }}</span>
 
-            console.log(user.name)
-            fetch('users.json')         
-            .then((res) => res.json())
-            .then((json) => (this.users=json))
-            .catch((err) => (alert('No se obtuvo respuesta')))
-        }
-    }).mount('#myapp')
-</script>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Alias</th>
+                    <th>Correo</th>
+                    <th>Telefono</th>
+                    <th>Pagina</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="u in users">
+                    <td>{{u.name}}</td>
+                    <td>{{u.username}}</td>
+                    <td>{{u.email}}</td>
+                    <td>{{u.phone}}</td>
+                    <td>{{u.website}}</td>
+                    <td>
+                        <button>Modificar</button>
+                        <button>Eliminar</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://unpkg.com/vue@3"></script>
+    <script type="text/javascript">
+        const {
+            createApp
+        } = Vue
+        createApp({
+            data() {
+                return {
+                    users: null,
+                    n: ''
+                }
+            },
+            methods: {},
+            mounted() {
+                let u = localStorage.getItem('user')
+                let user = JSON.parse(u)
+
+                this.n = user.name
+                fetch('users.json')
+                    .then((res) => res.json())
+                    .then((json) => (this.users = json))
+                    .catch((err) => (alert('No se obtuvo respuesta')))
+            }
+        }).mount('#myapp')
+    </script>
 </body>
+
 </html>
