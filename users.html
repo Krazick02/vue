@@ -5,38 +5,83 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="initial-scale=1.0">
-    <title>Ejemplo VUE</title>
+    <title>Usuarios</title>
 </head>
 
 <body>
     <div id="myapp">
         <span>Bienbenido : {{ n }}</span>
+        <div v-show="mostrarForm">
+            <form action="" id="form">
+                <fieldset>
+                    <legend>Register</legend>
+                    <label for="">
+                        Nombre completo:
+                        <input type="text" v-model="nameF" required>
+                    </label>
+                    <hr>
+                    <label for="">
+                        Nombre de Usuario:
+                        <input type="text" v-model="usernameF" required>
+                    </label>
+                    <hr>
+                    <label for="">
+                        Correo electronico:
+                        <input type="email" v-model="emailF" required>
+                    </label>
+                    <hr>
+                    <label for="">
+                        Contraseña:
+                        <input type="password" v-model="passwordF" required>
+                    </label>
+                    <hr>
+                    <label for="">
+                        Numero Telefonico:
+                        <input type="text" v-model="phoneF" required>
+                    </label>
+                    <hr>
+                    <label for="">
+                        Pagina web:
+                        <input type="text" v-model="websiteF" required>
+                    </label>
+                    <hr>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Alias</th>
-                    <th>Correo</th>
-                    <th>Telefono</th>
-                    <th>Pagina</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="u in users">
-                    <td>{{u.name}}</td>
-                    <td>{{u.username}}</td>
-                    <td>{{u.email}}</td>
-                    <td>{{u.phone}}</td>
-                    <td>{{u.website}}</td>
-                    <td>
-                        <button @click='modificar'>Modificar</button>
-                        <button>Eliminar</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                    <button @click="register" type="submit">Enter</button>
+                </fieldset>
+            </form>
+        </div>
+        <div v-show="!mostrarForm">
+            <fieldset>
+                <legend>Usuarios</legend>
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Alias</th>
+                            <th>Correo</th>
+                            <th>Telefono</th>
+                            <th>Pagina</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="u in users">
+                            <td>{{u.name}}</td>
+                            <td>{{u.username}}</td>
+                            <td>{{u.email}}</td>
+                            <td>{{u.phone}}</td>
+                            <td>{{u.website}}</td>
+                            <td>
+                                <button>Modificar</button>
+                                <button>Eliminar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button @click="mostrarForm=true">Añadir Usuario</button>
+            </fieldset>
+        </div>
+        <button @click="cs">Cerrar Seccion</button>
     </div>
 
     <script src="https://unpkg.com/vue@3"></script>
@@ -48,34 +93,36 @@
             data() {
                 return {
                     users: null,
-                    n: ''
+                    mostrarForm: false,
+                    nameF: '',
+                    usernameF: '',
+                    emailF: '',
+                    passwordF: '',
+                    phoneF: '',
+                    websiteF: ''
                 }
             },
             methods: {
-                modificar() {
-                    let tme = this.email
-                    let tmp = this.password
-                    let tmu = null
-
-                    var access = this.users.map(function(u) {
-                        if (tme === u.email) {
-                            if (tmp === u.password) {
-
-                                alert('Acceso Correcto')
-
-                                var tmu = {
-                                    name: u.name,
-                                    username: u.username,
-                                    email: u.email
-                                }
-
-                                localStorage.setItem('user', JSON.stringify(tmu))
-
-                                window.location.href = "users.html";
-                                return true;
-                            }
-                        }
-                    })
+                register() {
+                    this.mostrarForm = false;
+                    this.users.push({
+                        name: this.nameF,
+                        username: this.usernameF,
+                        email: this.emailF,
+                        password: this.passwordF,
+                        phone: this.phoneF,
+                        website: this.websiteF,
+                    });
+                    this.nameF = '',
+                        this.usernameF = '',
+                        this.emailF = '',
+                        this.passwordF = '',
+                        this.phoneF = '',
+                        this.websiteF = ''
+                },
+                cs() {
+                    localStorage.removeItem('user');
+                    window.location.href = "index.html";
                 }
             },
             mounted() {
