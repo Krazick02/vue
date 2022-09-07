@@ -14,7 +14,8 @@
         <div v-show="mostrarForm">
             <form action="" id="form">
                 <fieldset>
-                    <legend>Register</legend>
+                    <legend v-show="!editarf">Registrar</legend>
+                    <legend v-show="editarf">Editar</legend>
                     <label for="">
                         Nombre completo:
                         <input type="text" v-model="nameF" required>
@@ -29,10 +30,10 @@
                         Correo electronico:
                         <input type="email" v-model="emailF" required>
                     </label>
-                    <hr>
-                    <label for="">
+                    <hr v-show="!editarf">
+                    <label for="" v-show="!editarf">
                         Contraseña:
-                        <input type="password" v-model="passwordF" required>
+                        <input type="password"  v-model="passwordF">
                     </label>
                     <hr>
                     <label for="">
@@ -45,8 +46,7 @@
                         <input type="text" v-model="websiteF" required>
                     </label>
                     <hr>
-
-                    <button @click="register" type="submit">Enter</button>
+                    <button @click="register">Guardar</button>
                 </fieldset>
             </form>
         </div>
@@ -56,6 +56,7 @@
                 <table border="1">
                     <thead>
                         <tr>
+                            <th>Id</th>
                             <th>Nombre</th>
                             <th>Alias</th>
                             <th>Correo</th>
@@ -66,14 +67,15 @@
                     </thead>
                     <tbody>
                         <tr v-for="u in users">
+                            <td>{{u.id}}</td>
                             <td>{{u.name}}</td>
                             <td>{{u.username}}</td>
                             <td>{{u.email}}</td>
                             <td>{{u.phone}}</td>
                             <td>{{u.website}}</td>
                             <td>
-                                <button>Modificar</button>
-                                <button>Eliminar</button>
+                                <button @click="llenarForm(u)">Modificar</button>
+                                <button @click="eliminar(u.id)">Eliminar</button>
                             </td>
                         </tr>
                     </tbody>
@@ -86,6 +88,7 @@
 
     <script src="https://unpkg.com/vue@3"></script>
     <script type="text/javascript">
+        let id = 0;
         const {
             createApp
         } = Vue
@@ -94,6 +97,8 @@
                 return {
                     users: null,
                     mostrarForm: false,
+                    editarf: false,
+                    numId: '',
                     nameF: '',
                     usernameF: '',
                     emailF: '',
@@ -104,25 +109,57 @@
             },
             methods: {
                 register() {
+                    if (this.editarf) {
+                        this.users.splice(this.numId - 1, 1, ({
+                            id: this.numId,
+                            name: this.nameF,
+                            username: this.usernameF,
+                            email: this.emailF,
+                            password: this.password,
+                            phone: this.phoneF,
+                            website: this.websiteF
+                        }))
+                    } else {
+                        id += 1;
+                        this.users.push({
+                            id: id,
+                            name: this.nameF,
+                            username: this.usernameF,
+                            email: this.emailF,
+                            password: this.passwordF,
+                            phone: this.phoneF,
+                            website: this.websiteF,
+                        });
+                    }
+                    this.numId = ''
+                    this.nameF = ''
+                    this.usernameF = ''
+                    this.emailF = ''
+                    this.passwordF = ''
+                    this.phoneF = ''
+                    this.websiteF = ''
                     this.mostrarForm = false;
-                    this.users.push({
-                        name: this.nameF,
-                        username: this.usernameF,
-                        email: this.emailF,
-                        password: this.passwordF,
-                        phone: this.phoneF,
-                        website: this.websiteF,
-                    });
-                    this.nameF = '',
-                        this.usernameF = '',
-                        this.emailF = '',
-                        this.passwordF = '',
-                        this.phoneF = '',
-                        this.websiteF = ''
+                    this.editarf = false;
                 },
                 cs() {
                     localStorage.removeItem('user');
                     window.location.href = "index.html";
+                },
+                llenarForm(u) {
+                    this.editarf = true;
+                    this.mostrarForm = true;
+                    this.numId = u.id
+                    this.nameF = u.name
+                    this.usernameF = u.username
+                    this.emailF = u.email
+                    this.password = u.password
+                    this.phoneF = u.phone
+                    this.websiteF = u.website
+                },
+                eliminar(ide) {
+                    ide -= 1;
+                    console.log(ide);
+                    this.users.splice(ide, 1);
                 }
             },
             mounted() {
@@ -132,8 +169,13 @@
                 this.n = user.name
                 fetch('users.json')
                     .then((res) => res.json())
-                    .then((json) => (this.users = json))
+                    .then((json) => (
+                        this.users = json,
+                        id = json.length
+                    ))
                     .catch((err) => (alert('No se obtuvo respuesta')))
+
+
             }
         }).mount('#myapp')
     </script>
